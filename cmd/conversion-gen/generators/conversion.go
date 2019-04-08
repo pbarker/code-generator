@@ -119,10 +119,10 @@ type conversionPair struct {
 
 // All of the types in conversions map are of type "DeclarationOf" with
 // the underlying type being "Func".
-type conversionFuncMap map[conversionPair]*types.Type
+type ConversionFuncMap map[conversionPair]*types.Type
 
 // Returns all manually-defined conversion functions in the package.
-func getManualConversionFunctions(context *generator.Context, pkg *types.Package, manualMap conversionFuncMap) {
+func getManualConversionFunctions(context *generator.Context, pkg *types.Package, manualMap ConversionFuncMap) {
 	if pkg == nil {
 		klog.Warningf("Skipping nil package passed to getManualConversionFunctions")
 		return
@@ -200,7 +200,7 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 
 	// Accumulate pre-existing conversion functions.
 	// TODO: This is too ad-hoc.  We need a better way.
-	manualConversions := conversionFuncMap{}
+	manualConversions := ConversionFuncMap{}
 
 	// Record types that are memory equivalent. A type is memory equivalent
 	// if it has the same memory layout and no nested manual conversion is
@@ -458,14 +458,14 @@ type genConversion struct {
 	outputPackage string
 	// packages that contain the peer of types in typesPacakge
 	peerPackages      []string
-	manualConversions conversionFuncMap
+	manualConversions ConversionFuncMap
 	imports           namer.ImportTracker
 	types             []*types.Type
 	skippedFields     map[*types.Type][]string
 	useUnsafe         TypesEqual
 }
 
-func NewGenConversion(sanitizedName, typesPackage, outputPackage string, manualConversions conversionFuncMap, peerPkgs []string, useUnsafe TypesEqual) generator.Generator {
+func NewGenConversion(sanitizedName, typesPackage, outputPackage string, manualConversions ConversionFuncMap, peerPkgs []string, useUnsafe TypesEqual) generator.Generator {
 	return &genConversion{
 		DefaultGen: generator.DefaultGen{
 			OptionalName: sanitizedName,
